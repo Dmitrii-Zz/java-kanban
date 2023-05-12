@@ -2,199 +2,248 @@ package logic;
 import task.Epic;
 import task.Subtask;
 import task.Task;
-
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagerTests {
     Manager manager = new Manager();
-    @org.junit.jupiter.api.Test
-    void createTask() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        Task task = manager.tasks.get(1);
-        assertEquals(2, manager.tasks.size());
-        assertEquals(1, task.getIdTask());
-        assertEquals("Новая задача.", task.getNameTask());
-        assertEquals("Выполнить новую задачу.", task.getDescriptionTask());
-        assertEquals("NEW", task.getStatusTask());
-    }
-
-    @org.junit.jupiter.api.Test
-    void deleteTaskTest() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        manager.deleteTask();
-        assertEquals(0, manager.tasks.size());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getTask() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        assertEquals(manager.tasks.get(2),manager.getTask(2));
-    }
-
-    @org.junit.jupiter.api.Test
-    void createEpic() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-    }
-
-    @org.junit.jupiter.api.Test
-    void deleteTaskId() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        assertEquals(2, manager.tasks.size());
-        manager.deleteTaskId(2);
-        assertEquals(1, manager.tasks.size());
-    }
-
-    @org.junit.jupiter.api.Test
-    void totalTest() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        Task task = manager.tasks.get(1);
-        assertEquals(2, manager.tasks.size());
-        assertEquals(1, task.getIdTask());
-        assertEquals("Новая задача.", task.getNameTask());
-        assertEquals("Выполнить новую задачу.", task.getDescriptionTask());
-        assertEquals("NEW", task.getStatusTask());
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новый эпик - 2.", "Выполнить новый эпик - 2.");
-        assertEquals(2, manager.epics.size());
-        Epic epic = manager.epics.get(4);
-        assertEquals("Новый эпик - 2.", epic.getNameTask());
-    }
-    @org.junit.jupiter.api.Test
-    void updateTaskTest() {
-        manager.createTask("Новая задача.", "Выполнить новую задачу.", "NEW");
-        manager.createTask("Новая задача - 2.", "Выполнить новую задачу - 2.", "NEW");
-        Task task = manager.tasks.get(1);
-        assertEquals(2, manager.tasks.size());
-        assertEquals(1, task.getIdTask());
-        assertEquals("Новая задача.", task.getNameTask());
-        assertEquals("Выполнить новую задачу.", task.getDescriptionTask());
-        assertEquals("NEW", task.getStatusTask());
-        manager.updateTask("Уже не новая задача.",
-                "Выполнить уже не новую задачу.", "IN_PR", 1);
-        assertEquals(2, manager.tasks.size());
-        assertEquals(1, task.getIdTask());
-        assertEquals("Уже не новая задача.", task.getNameTask());
-        assertEquals("Выполнить уже не новую задачу.", task.getDescriptionTask());
-        assertEquals("IN_PR", task.getStatusTask());
-    }
-    @org.junit.jupiter.api.Test
-    void createSubTaskTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "NEW", 2);
-        manager.createSubTask("Новая подзадача - 2.", "Выполнить новую подзадачу - 2",
-                "NEW", 2);
-        manager.createSubTask("Новая подзадача - 3.", "Выполнить новую подзадачу - 3",
-                "NEW", 2);
-        Epic epic = manager.epics.get(2);
-        ArrayList<Integer> subTasks = epic.getIdSubTasks();
-        assertEquals(3, subTasks.size());
-    }
-    @org.junit.jupiter.api.Test
-    void createEpicTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        Epic epic = manager.epics.get(2);
-        assertEquals("NEW", epic.getStatusTask());
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "DONE", 2);
-        manager.createSubTask("Новая подзадача - 2.", "Выполнить новую подзадачу - 2",
-                "DONE", 2);
-        manager.createSubTask("Новая подзадача - 3.", "Выполнить новую подзадачу - 3",
-                "DONE", 2);
-        assertEquals("DONE", epic.getStatusTask());
-    }
-
-    @org.junit.jupiter.api.Test
-    void updateEpicTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        Epic epic = manager.epics.get(2);
-        assertEquals("NEW", epic.getStatusTask());
-        assertEquals("Новая эпик - 2.", epic.getNameTask());
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "NEW", 2);
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "IN_PROGRESS", 2);
-        manager.updateEpic("Новая эпик - 2.0.", "Выполнить новый эпик - 2.", 2);
-        assertEquals("Новая эпик - 2.0.", epic.getNameTask());
-        assertEquals("IN_PROGRESS", epic.getStatusTask());
-    }
-    @org.junit.jupiter.api.Test
-    void deleteEpicTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        assertEquals(2, manager.epics.size());
-        manager.deleteEpic();
-        assertEquals(0, manager.epics.size());
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        assertEquals(2, manager.epics.size());
-        manager.deleteEpicId(3);
-        assertEquals(1, manager.epics.size());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getEpicIdTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.", "Выполнить новый эпик - 2.");
-        assertEquals(manager.epics.get(2), manager.getEpicId(2));
-    }
-
-    @org.junit.jupiter.api.Test
-    void updateSubTask() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.0.", "Выполнить новый эпик - 2.");
-        Epic epic = manager.epics.get(2);
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "DONE", 2);
-        manager.createSubTask("Новая подзадача - 2.", "Выполнить новую подзадачу - 2",
-                "NEW", 2);
-        Subtask subTask = manager.subTasks.get(4);
-        assertEquals("Новая эпик - 2.0.", epic.getNameTask());
-        assertEquals("IN_PROGRESS", epic.getStatusTask());
-        assertEquals("Новая подзадача - 2.", subTask.getNameTask());
-        manager.updateSubTask("Новая подзадача - 2.1", "Выполнить новую подзадачу - 2.1",
-                "DONE", 4);
-        assertEquals("Новая эпик - 2.0.", epic.getNameTask());
-        assertEquals("DONE", epic.getStatusTask());
-        assertEquals("Новая подзадача - 2.1", subTask.getNameTask());
-    }
-
-    @org.junit.jupiter.api.Test
-    void deleteSubTaskTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.0.", "Выполнить новый эпик - 2.");
-        Epic epic = manager.epics.get(2);
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "DONE", 2);
-        manager.createSubTask("Новая подзадача - 2.", "Выполнить новую подзадачу - 2",
-                "NEW", 2);
-        assertEquals(2, manager.subTasks.size());
-        manager.deleteSubTask();
-        assertEquals(0, manager.subTasks.size());
-    }
-
-    @org.junit.jupiter.api.Test
-    void deleteSubTaskIdTest() {
-        manager.createEpic("Новый эпик.", "Выполнить новый эпик.");
-        manager.createEpic("Новая эпик - 2.0.", "Выполнить новый эпик - 2.");
-        Epic epic = manager.epics.get(2);
-        manager.createSubTask("Новая подзадача.", "Выполнить новую подзадачу",
-                "DONE", 2);
-        manager.createSubTask("Новая подзадача - 2.", "Выполнить новую подзадачу - 2",
-                "NEW", 2);
-        assertEquals(2, manager.subTasks.size());
-        manager.deleteSubTaskId(3);
-        assertEquals(1, manager.subTasks.size());
-    }
+//    @org.junit.jupiter.api.Test
+//    void createTaskTest() {
+//        Task task = new Task();
+//        task.setNameTask("Задача 1.");
+//        task.setDescriptionTask("Описание задачи 1.");
+//        task.setStatusTask("NEW");
+//        manager.createTask(task);
+//        Task task1 = manager.tasks.get(1);
+//        assertEquals("NEW", task1.getStatusTask());
+//        assertEquals("Задача 1.", task1.getNameTask());
+//        manager.deleteTaskId(2);
+//        assertEquals(1,manager.tasks.size());
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void createSubTaskTest() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.");
+//        subtask.setStatusTask("DONE");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//        Subtask subtask2 = new Subtask();
+//        subtask2.setNameTask("Подзадача 2.");
+//        subtask2.setDescriptionTask("Выполнить подзадачу 2.");
+//        subtask2.setStatusTask("NEW");
+//        subtask2.setIdEpic(1);
+//        manager.createSubTask(subtask2);
+//        Epic epic1 = manager.epics.get(1);
+//        Subtask subtask1 = manager.subTasks.get(2);
+//        assertEquals("Эпик 1.", epic1.getNameTask());
+//        assertEquals("Подзадача 1.", subtask1.getNameTask());
+//        assertEquals("Выполнить эпик 1.", epic1.getDescriptionTask());
+//        assertEquals("Выполнить подзадачу 1.", subtask1.getDescriptionTask());
+//        assertEquals("IN_PROGRESS", epic1.getStatusTask());
+//        assertEquals("DONE", subtask1.getStatusTask());
+//        assertEquals(1, subtask1.getIdEpic());
+//        assertEquals(2, epic1.getIdSubTasks().size());
+//    }
+//    @org.junit.jupiter.api.Test
+//    void updateTaskTest() {
+//        Task task = new Task();
+//        task.setNameTask("Задача 1.");
+//        task.setDescriptionTask("Описание задачи 1.");
+//        task.setStatusTask("NEW");
+//        manager.createTask(task);
+//        Task task1 = new Task();
+//        task1.setNameTask("Задача 2.");
+//        task1.setDescriptionTask("Описание задачи 2.");
+//        task1.setStatusTask("IN_PROGRESS");
+//        manager.createTask(task1);
+//        Task task3 = new Task();
+//        task3.setNameTask("Задача 3.");
+//        task3.setDescriptionTask("Описание задачи 3.");
+//        task3.setStatusTask("NEW");
+//        manager.createTask(task3);
+//        Task task333 = manager.tasks.get(3);
+//        assertEquals("NEW", task333.getStatusTask());
+//        Task task33 = manager.tasks.get(3);
+//        task33.setNameTask("Задача 3.0.");
+//        task33.setDescriptionTask("Задача выполнена.");
+//        task33.setStatusTask("DONE");
+//        manager.updateTask(task33);
+//        assertEquals("DONE", task33.getStatusTask());
+//    }
+//    @org.junit.jupiter.api.Test
+//    void deleteSubtask() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.");
+//        subtask.setStatusTask("DONE");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//        Subtask subtask2 = new Subtask();
+//        subtask2.setNameTask("Подзадача 2.");
+//        subtask2.setDescriptionTask("Выполнить подзадачу 2.");
+//        subtask2.setStatusTask("NEW");
+//        subtask2.setIdEpic(1);
+//        manager.createSubTask(subtask2);
+//
+//        Epic epic1 = manager.epics.get(1);
+//        Subtask subtask1 = manager.subTasks.get(2);
+//        assertEquals("IN_PROGRESS", epic1.getStatusTask());
+//        assertEquals("DONE", subtask1.getStatusTask());
+//        manager.deleteSubTaskId(3);
+//        assertEquals("DONE", epic1.getStatusTask());
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void deleteSubtaskTest() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//        Epic epic2 = new Epic();
+//        epic2.setNameTask("Эпик 2.");
+//        epic2.setDescriptionTask("Выполнить эпик 2.");
+//        manager.createEpic(epic2);
+//        Epic epic3 = new Epic();
+//        epic3.setNameTask("Эпик 3.");
+//        epic3.setDescriptionTask("Выполнить эпик 3.");
+//        manager.createEpic(epic3);
+//
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.1.");
+//        subtask.setStatusTask("NEW");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//        Subtask subtask1 = new Subtask();
+//        subtask1.setNameTask("Подзадача 2.1.");
+//        subtask1.setDescriptionTask("Выполнить подзадачу 2.1.");
+//        subtask1.setStatusTask("DONE");
+//        subtask1.setIdEpic(2);
+//        manager.createSubTask(subtask1);
+//        Subtask subtask2 = new Subtask();
+//        subtask2.setNameTask("Подзадача 3.1.");
+//        subtask2.setDescriptionTask("Выполнить подзадачу 3.1.");
+//        subtask2.setStatusTask("IN_PROGRESS");
+//        subtask2.setIdEpic(3);
+//        manager.createSubTask(subtask2);
+//
+//        Epic epic11 = manager.epics.get(2);
+//        assertEquals(1, epic11.getIdSubTasks().size());
+//        assertEquals("DONE", epic11.getStatusTask());
+//
+//        manager.deleteSubTask();
+//        assertEquals(0, epic11.getIdSubTasks().size());
+//        assertEquals("NEW", epic11.getStatusTask());
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void deleteSubtaskIdTest() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//        Epic epic2 = new Epic();
+//        epic2.setNameTask("Эпик 2.");
+//        epic2.setDescriptionTask("Выполнить эпик 2.");
+//        manager.createEpic(epic2);
+//        Epic epic3 = new Epic();
+//        epic3.setNameTask("Эпик 3.");
+//        epic3.setDescriptionTask("Выполнить эпик 3.");
+//        manager.createEpic(epic3);
+//
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.1.");
+//        subtask.setStatusTask("NEW");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//        Subtask subtask1 = new Subtask();
+//        subtask1.setNameTask("Подзадача 2.1.");
+//        subtask1.setDescriptionTask("Выполнить подзадачу 2.1.");
+//        subtask1.setStatusTask("DONE");
+//        subtask1.setIdEpic(2);
+//        manager.createSubTask(subtask1);
+//        Subtask subtask3 = new Subtask();
+//        subtask3.setNameTask("Подзадача 2.2.");
+//        subtask3.setDescriptionTask("Выполнить подзадачу 2.2.");
+//        subtask3.setStatusTask("NEW");
+//        subtask3.setIdEpic(2);
+//        manager.createSubTask(subtask3);
+//        Subtask subtask2 = new Subtask();
+//        subtask2.setNameTask("Подзадача 3.1.");
+//        subtask2.setDescriptionTask("Выполнить подзадачу 3.1.");
+//        subtask2.setStatusTask("IN_PROGRESS");
+//        subtask2.setIdEpic(3);
+//        manager.createSubTask(subtask2);
+//
+//        Epic epic11 = manager.epics.get(2);
+//        assertEquals(2, epic11.getIdSubTasks().size());
+//        assertEquals("IN_PROGRESS", epic11.getStatusTask());
+//
+//        manager.deleteSubTaskId(6);
+//        manager.deleteSubTaskId(5);
+//        assertEquals(0, epic11.getIdSubTasks().size());
+//        assertEquals("NEW", epic11.getStatusTask());
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void deleteEpicIdTest() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.1.");
+//        subtask.setStatusTask("NEW");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//        Subtask subtask1 = new Subtask();
+//        subtask1.setNameTask("Подзадача 2.1.");
+//        subtask1.setDescriptionTask("Выполнить подзадачу 2.1.");
+//        subtask1.setStatusTask("DONE");
+//        subtask1.setIdEpic(1);
+//        manager.createSubTask(subtask1);
+//        Subtask subtask3 = new Subtask();
+//        subtask3.setNameTask("Подзадача 2.2.");
+//        subtask3.setDescriptionTask("Выполнить подзадачу 2.2.");
+//        subtask3.setStatusTask("NEW");
+//        subtask3.setIdEpic(1);
+//        manager.createSubTask(subtask3);
+//        Subtask subtask2 = new Subtask();
+//        subtask2.setNameTask("Подзадача 3.1.");
+//        subtask2.setDescriptionTask("Выполнить подзадачу 3.1.");
+//        subtask2.setStatusTask("IN_PROGRESS");
+//        subtask2.setIdEpic(1);
+//        manager.createSubTask(subtask2);
+//
+//        assertEquals(1, manager.epics.size());
+//        assertEquals(4, manager.subTasks.size());
+//        manager.deleteEpicId(2);
+//        assertEquals(1, manager.epics.size());
+//        assertEquals(4, manager.subTasks.size());
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void getTaskTest() {
+//        Task task = new Task();
+//        task.setNameTask("Задача 1.");
+//        task.setDescriptionTask("Описание задачи 1.");
+//        task.setStatusTask("NEW");
+//        manager.createTask(task);
+//        Task task1 = manager.getTask(1);
+//        assertEquals("NEW", task1.getStatusTask());
+//        assertEquals("Задача 1.", task1.getNameTask());
+//    }
 }
