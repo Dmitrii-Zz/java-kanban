@@ -2,6 +2,9 @@ package logic;
 import task.Epic;
 import task.Subtask;
 import task.Task;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagerTests {
@@ -245,5 +248,41 @@ class ManagerTests {
 //        Task task1 = manager.getTask(1);
 //        assertEquals("NEW", task1.getStatusTask());
 //        assertEquals("Задача 1.", task1.getNameTask());
+//    }
+//    @org.junit.jupiter.api.Test
+//    void updateEpicTest() {
+//        Epic epic = new Epic();
+//        epic.setNameTask("Эпик 1.");
+//        epic.setDescriptionTask("Выполнить эпик 1.");
+//        manager.createEpic(epic);
+//
+//        Subtask subtask = new Subtask();
+//        subtask.setNameTask("Подзадача 1.1.");
+//        subtask.setDescriptionTask("Выполнить подзадачу 1.1.");
+//        subtask.setStatusTask("NEW");
+//        subtask.setIdEpic(1);
+//        manager.createSubTask(subtask);
+//
+//        Epic epicTest = manager.epics.get(1);
+//
+//        assertEquals(1, epicTest.getIdSubTasks().size());
+//        assertEquals("Эпик 1.", epicTest.getNameTask());
+//        assertEquals("Выполнить эпик 1.", epicTest.getDescriptionTask());
+//
+//        Epic updateEpic = new Epic();
+//        epic.setNameTask("Эпик 1 обновленный.");
+//        epic.setDescriptionTask("Выполнить эпик 1 обновленный.");
+//        epic.setIdTask(1);
+//        ArrayList<Integer> idSubTusk = new ArrayList<>();
+//        idSubTusk.add(1);
+//        idSubTusk.add(2);
+//        idSubTusk.add(3);
+//        updateEpic.setIdSubTasks(idSubTusk);
+//
+//        manager.updateEpic(updateEpic);
+//
+//        assertEquals(1, epicTest.getIdSubTasks().size());
+//        assertEquals("Эпик 1 обновленный.", epicTest.getNameTask());
+//        assertEquals("Выполнить эпик 1 обновленный.", epicTest.getDescriptionTask());
 //    }
 }
