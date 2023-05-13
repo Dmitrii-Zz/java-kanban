@@ -34,7 +34,7 @@ public class Manager {
     }
 
     public Task getTask(int idTask) {
-            return tasks.get(idTask);
+        return tasks.get(idTask);
     }
 
     public void createEpic(Epic epic) {
@@ -46,7 +46,10 @@ public class Manager {
 
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getIdTask())) {
-            epics.put(epic.getIdTask(), epic);
+            Epic updateEpic = epics.get(epic.getIdTask());
+            updateEpic.setNameTask(epic.getNameTask());
+            updateEpic.setDescriptionTask(epic.getDescriptionTask());
+            epics.put(epic.getIdTask(), updateEpic);
             fillEpicStatus(epic.getIdTask());
         }
     }
@@ -76,14 +79,16 @@ public class Manager {
     }
 
     public void createSubTask(Subtask subtask) {
-        idTask++;
-        subtask.setIdTask(idTask);
-        Epic epic = epics.get(subtask.getIdEpic());
-        ArrayList<Integer> idSubTasks = epic.getIdSubTasks();
-        idSubTasks.add(idTask);
-        epic.setIdSubTasks(idSubTasks);
-        subTasks.put(idTask, subtask);
-        fillEpicStatus(subtask.getIdEpic());
+        if (epics.containsKey(subtask.getIdEpic())) {
+            idTask++;
+            subtask.setIdTask(idTask);
+            Epic epic = epics.get(subtask.getIdEpic());
+            ArrayList<Integer> idSubTasks = epic.getIdSubTasks();
+            idSubTasks.add(idTask);
+            epic.setIdSubTasks(idSubTasks);
+            subTasks.put(idTask, subtask);
+            fillEpicStatus(subtask.getIdEpic());
+        }
     }
 
     public void updateSubTask(Subtask subTask) {
@@ -136,7 +141,7 @@ public class Manager {
     private void fillEpicStatus(int idEpic) {
         Epic epic = epics.get(idEpic);
         ArrayList<Integer> idSubTasks = epic.getIdSubTasks();
-        if (idSubTasks.size() == 0) {
+        if (idSubTasks.isEmpty()) {
             epic.setStatusTask("NEW");
             return;
         }
