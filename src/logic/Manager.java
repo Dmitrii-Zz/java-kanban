@@ -49,7 +49,6 @@ public class Manager {
             Epic updateEpic = epics.get(epic.getIdTask());
             updateEpic.setNameTask(epic.getNameTask());
             updateEpic.setDescriptionTask(epic.getDescriptionTask());
-            epics.put(epic.getIdTask(), updateEpic);
             fillEpicStatus(epic.getIdTask());
         }
     }
