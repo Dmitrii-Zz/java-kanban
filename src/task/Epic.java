@@ -1,14 +1,15 @@
 package task;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    private ArrayList<Integer> idSubTasks = new ArrayList<>();
+    private List<Integer> idSubTasks = new ArrayList<>();
 
-    public ArrayList<Integer> getIdSubTasks() {
+    public List<Integer> getIdSubTasks() {
         return idSubTasks;
     }
 
-    public void setIdSubTasks(ArrayList<Integer> idSubTasks) {
+    public void setIdSubTasks(List<Integer> idSubTasks) {
         this.idSubTasks = idSubTasks;
     }
 
