@@ -1,93 +1,79 @@
-import logic.Manager;
-import task.Epic;
-import task.Subtask;
-import task.Task;
+import logic.HistoryManager;
+import logic.Managers;
+import logic.TaskManager;
+import task.StatusTask;
+import task.*;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        Manager manager = new Manager();
 
-        Task task1 = new Task();
-        task1.setNameTask("Задача 1.");
-        task1.setDescriptionTask("Выполнить задачу 1.");
-        task1.setStatusTask("NEW");
-        manager.createTask(task1);
-        Task task2 = new Task();
-        task2.setNameTask("Задача 2.");
-        task2.setDescriptionTask("Выполняется задача 2.");
-        task2.setStatusTask("IN_PROGRESS");
-        manager.createTask(task2);
+        TaskManager taskManager = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
 
-        Epic epic1 = new Epic();
-        epic1.setNameTask("Эпик 1.");
-        epic1.setDescriptionTask("Выполнить эпик 1.");
-        manager.createEpic(epic1);
+        for (int i = 1; i <= 15; i++) {
+            Task task = new Task();
+            task.setNameTask("Задача  " + i + ".");
+            task.setDescriptionTask("Описание задачи " + i + ".");
+            task.setStatusTask(StatusTask.NEW);
+            taskManager.createTask(task);
+        }
 
-        Subtask subtask1 = new Subtask();
-        subtask1.setNameTask("Подзадача 1.1.");
-        subtask1.setDescriptionTask("Выполнить подзадачу 1.1.");
-        subtask1.setStatusTask("NEW");
-        subtask1.setIdEpic(3);
-        manager.createSubTask(subtask1);
-        Subtask subtask2 = new Subtask();
-        subtask2.setNameTask("Подзадача 1.2.");
-        subtask2.setDescriptionTask("Выполнить подзадачу 1.2.");
-        subtask2.setStatusTask("NEW");
-        subtask2.setIdEpic(3);
-        manager.createSubTask(subtask2);
+        for (int i = 1; i <= 10; i++) {
+            Epic epic = new Epic();
+            epic.setNameTask("Эпик " + i + ".");
+            epic.setDescriptionTask("Описание эпика " + i + ".");
+            taskManager.createEpic(epic);
+        }
 
-        Epic epic2 = new Epic();
-        epic2.setNameTask("Эпик 2.");
-        epic2.setDescriptionTask("Выполняется эпик 2.");
-        manager.createEpic(epic2);
+        for (int i = 1; i <= 15; i++) {
+            Subtask subtask = new Subtask();
+            subtask.setNameTask("Подзадача " + i);
+            subtask.setDescriptionTask("Описание подзадачи " + i);
+            subtask.setStatusTask(StatusTask.NEW);
+            subtask.setIdEpic(15 + i);
+            taskManager.createSubTask(subtask);
+        }
 
-        Subtask subtask3 = new Subtask();
-        subtask3.setNameTask("Подзадача 2.1.");
-        subtask3.setDescriptionTask("Выполняется подзадача 2.1.");
-        subtask3.setStatusTask("IN_PROGRESS");
-        subtask3.setIdEpic(6);
-        manager.createSubTask(subtask3);
+        System.out.println("Кол-во созданных задач: " + taskManager.getAllTask().size());
+        System.out.println("Кол-во созданных эпиков: " + taskManager.getAllEpic().size());
+        System.out.println("Кол-во созданных подзадач: " + taskManager.getAllSubTask().size());
 
-        System.out.println("Создаем задачи:");
-        System.out.println(manager.getAllTask());
-        System.out.println("Создаем эпики:");
-        System.out.println(manager.getAllEpic());
-        System.out.println("Создаем подзадачи:");
-        System.out.println(manager.getAllSubTask());
+        for (int i = 13; i > 8; i--) {
+            Task task = taskManager.getTask(i);
+        }
 
-        task1.setDescriptionTask("Выполняется задача 1.");
-        task1.setStatusTask("IN_PROGRESS");
-        manager.updateTask(task1);
+        System.out.println("\nВызвали задачи.");
+        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Состав истории задач:");
+        for (Task task : historyManager.getHistory()) {
+            System.out.println(task);
+        }
 
+        Subtask subtask = taskManager.getSubTaskId(29);
 
-        task2.setDescriptionTask("Задача 2 выполнена.");
-        task2.setStatusTask("DONE");
-        manager.updateTask(task2);
+        for (int i = 20; i < 23; i++) {
+            Epic epic = taskManager.getEpicId(i);
+        }
 
-        subtask1.setDescriptionTask("Выполняется подзадача 1.1.");
-        subtask1.setStatusTask("IN_PROGRESS");
-        manager.updateSubTask(subtask1);
+        System.out.println("\nВызвали задачу и эпики.");
+        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Состав истории задач:");
+        for (Task task : historyManager.getHistory()) {
+            System.out.println(task);
+        }
 
-        epic1.setDescriptionTask("Выполняется эпик 1.");
-        manager.updateEpic(epic1);
+        for (int i = 35; i > 33; i--) {
+            Subtask subtask1 = taskManager.getSubTaskId(i);
+        }
 
-        System.out.println("Обновили задачи:");
-        System.out.println(manager.getAllTask());
-        System.out.println("Обновили эпики:");
-        System.out.println(manager.getAllEpic());
-        System.out.println("Обновили подзадачи:");
-        System.out.println(manager.getAllSubTask());
+        Task task2 = taskManager.getTask(2);
 
-        manager.deleteTaskId(1);
-        manager.deleteEpicId(3);
-        manager.deleteSubTaskId(7);
-
-        System.out.println("Удалили задачу:");
-        System.out.println(manager.getAllTask());
-        System.out.println("Удалили эпики:");
-        System.out.println(manager.getAllEpic());
-        System.out.println("Удалили подзадачи:");
-        System.out.println(manager.getAllSubTask());
+        System.out.println("\nВызвали задачу и подзадачи.");
+        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Состав истории задач:");
+        for (Task task : historyManager.getHistory()) {
+            System.out.println(task);
+        }
     }
 }
