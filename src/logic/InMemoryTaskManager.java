@@ -148,13 +148,16 @@ public class Manager {
         boolean statusDone = false;
         for (int idSubTask : idSubTasks) {
             Subtask subtask = subTasks.get(idSubTask);
-            if (subtask.getStatusTask().equals("IN_PROGRESS")) {
-                epic.setStatusTask("IN_PROGRESS");
-                return;
-            } else if (subtask.getStatusTask().equals("NEW")) {
-                statusNew = true;
-            } else if (subtask.getStatusTask().equals("DONE")) {
-                statusDone = true;
+            switch (subtask.getStatusTask()) {
+                case "IN_PROGRESS":
+                    epic.setStatusTask("IN_PROGRESS");
+                    return;
+                case "NEW":
+                    statusNew = true;
+                    break;
+                case "DONE":
+                    statusDone = true;
+                    break;
             }
         }
         if (statusNew && statusDone) {
