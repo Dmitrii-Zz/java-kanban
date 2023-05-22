@@ -3,7 +3,7 @@ package task;
 public class Task {
     protected String nameTask;
     protected String descriptionTask;
-    protected String statusTask;
+    protected StatusTask statusTask;
     protected int idTask;
 
     public void setNameTask(String nameTask) {
@@ -18,7 +18,7 @@ public class Task {
         this.idTask = idTask;
     }
 
-    public void setStatusTask(String statusTask) {
+    public void setStatusTask(StatusTask statusTask) {
         this.statusTask = statusTask;
     }
 
@@ -34,7 +34,7 @@ public class Task {
         return idTask;
     }
 
-    public String getStatusTask() {
+    public StatusTask getStatusTask() {
         return statusTask;
     }
 
