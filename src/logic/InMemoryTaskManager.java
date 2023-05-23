@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idTask = 0;
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Map<Integer, Subtask> subTasks = new HashMap<>();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subTasks = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public void createTask(Task task) {
@@ -43,7 +43,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int idTask) {
-        historyManager.addTask(tasks.get(idTask));
+        if (tasks.containsKey(idTask)) {
+            historyManager.addTask(tasks.get(idTask));
+        }
         return tasks.get(idTask);
     }
 
@@ -90,7 +92,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicId(int idEpic) {
-        historyManager.addTask(epics.get(idEpic));
+        if (epics.containsKey(idEpic)) {
+            historyManager.addTask(epics.get(idEpic));
+        }
         return epics.get(idEpic);
     }
 
@@ -158,8 +162,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubTaskId(int idSubTask) {
-        historyManager.addTask(subTasks.get(idSubTask));
+        if (subTasks.containsKey(idSubTask)) {
+            historyManager.addTask(subTasks.get(idSubTask));
+        }
         return subTasks.get(idSubTask);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     private void fillEpicStatus(int idEpic) {
