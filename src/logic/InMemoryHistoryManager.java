@@ -1,11 +1,13 @@
 package logic;
 import task.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    static List<Task> taskHistory = new ArrayList<>();
+    private final LinkedList<Task> taskHistory = new LinkedList<>();
+    private static final int MAX_SIZE_TASK_HISTORY = 10;
 
     @Override
     public void addTask(Task task) {
@@ -15,12 +17,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        return taskHistory;
+        return new ArrayList<>(taskHistory);
     }
 
     public void checkSizeTaskHistory() {
-        while (taskHistory.size() > 10) {
-            taskHistory.remove(0);
+        while (taskHistory.size() > MAX_SIZE_TASK_HISTORY) {
+            taskHistory.removeFirst();
         }
     }
 }
