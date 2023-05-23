@@ -1,4 +1,3 @@
-import logic.HistoryManager;
 import logic.Managers;
 import logic.TaskManager;
 import task.StatusTask;
@@ -9,7 +8,6 @@ public class Main {
         System.out.println("Поехали!");
 
         TaskManager taskManager = Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistory();
 
         for (int i = 1; i <= 15; i++) {
             Task task = new Task();
@@ -44,9 +42,9 @@ public class Main {
         }
 
         System.out.println("\nВызвали задачи.");
-        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Кол-во подзадач в истории: " + taskManager.getHistory().size());
         System.out.println("Состав истории задач:");
-        for (Task task : historyManager.getHistory()) {
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 
@@ -57,9 +55,9 @@ public class Main {
         }
 
         System.out.println("\nВызвали задачу и эпики.");
-        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Кол-во подзадач в истории: " + taskManager.getHistory().size());
         System.out.println("Состав истории задач:");
-        for (Task task : historyManager.getHistory()) {
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 
@@ -70,9 +68,9 @@ public class Main {
         Task task2 = taskManager.getTask(2);
 
         System.out.println("\nВызвали задачу и подзадачи.");
-        System.out.println("Кол-во подзадач в истории: " + historyManager.getHistory().size());
+        System.out.println("Кол-во подзадач в истории: " + taskManager.getHistory().size());
         System.out.println("Состав истории задач:");
-        for (Task task : historyManager.getHistory()) {
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
     }
