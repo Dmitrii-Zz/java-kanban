@@ -1,28 +1,92 @@
 package logic;
 import task.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class InMemoryHistoryManager implements HistoryManager {
+public class InMemoryHistoryManager<T> implements HistoryManager {
 
-    private static final int MAX_SIZE_TASK_HISTORY = 10;
-    private final LinkedList<Task> taskHistory = new LinkedList<>();
+    private final Map<Integer, Node<Task>> historyTask = new HashMap<>();
+    private Node<Task> head;
+    private Node<Task> tail;
+    private int size = 0;
+
+    public class Node<Task> {
+        private Task data;
+        private Node<Task> next;
+        private Node<Task> prev;
+
+        public Node(Task data, Node<Task> next, Node<Task> prev) {
+            this.data = data;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+
+    public void linkLast(Task task, Integer id) {
+
+        if (historyTask.containsKey(id)) {
+            remove(id);
+            historyTask.remove(id);
+        }
+
+        Node<Task> oldTail = tail;
+        Node<Task> newNode = new Node<>(task, null, oldTail);
+        tail = newNode;
+        historyTask.put(id, tail);
+        if (oldTail == null) {
+            head = newNode;
+        } else {
+            oldTail.next = newNode;
+        }
+        size++;
+    }
+
+    public List<Task> getTasks() {
+        List<Task> tempTasksArray = new ArrayList<>();
+        Node<Task> curHead = tail;
+        while (curHead != null) {
+            tempTasksArray.add(curHead.data);
+            curHead = curHead.prev;
+        }
+        return tempTasksArray;
+    }
 
     @Override
     public void addTask(Task task) {
-        taskHistory.add(task);
-        checkSizeTaskHistory();
+        linkLast(task, task.getIdTask());
     }
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(taskHistory);
+        return getTasks();
     }
 
-    public void checkSizeTaskHistory() {
-        while (taskHistory.size() > MAX_SIZE_TASK_HISTORY) {
-            taskHistory.removeFirst();
+    @Override
+    public void remove(int id) {
+
+        Node<Task> deleteNode = historyTask.get(id); //11
+
+        Task data = deleteNode.data;
+        Node<Task> next = deleteNode.next;
+        Node<Task> prev = deleteNode.prev;
+
+        if (prev == null) {
+            head = next;
+        } else {
+            prev.next = next;
+            deleteNode.prev = null;
         }
+
+        if (next == null) {
+            tail = prev;
+        } else {
+            next.prev = prev;
+            deleteNode.next = null;
+        }
+
+        deleteNode.data = null;
+        size--;
     }
 }
