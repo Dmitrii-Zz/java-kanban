@@ -10,9 +10,9 @@ public class InMemoryHistoryManager<T> implements HistoryManager {
     private final Map<Integer, Node<Task>> historyTask = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
-    private int size = 0;
+    private int size;
 
-    public class Node<Task> {
+    private static class Node<Task> {
         private Task data;
         private Node<Task> next;
         private Node<Task> prev;
@@ -24,7 +24,7 @@ public class InMemoryHistoryManager<T> implements HistoryManager {
         }
     }
 
-    public void linkLast(Task task, Integer id) {
+    private void linkLast(Task task, Integer id) {
 
         if (historyTask.containsKey(id)) {
             remove(id);
@@ -43,7 +43,7 @@ public class InMemoryHistoryManager<T> implements HistoryManager {
         size++;
     }
 
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
         List<Task> tempTasksArray = new ArrayList<>();
         Node<Task> curHead = tail;
         while (curHead != null) {
@@ -66,27 +66,30 @@ public class InMemoryHistoryManager<T> implements HistoryManager {
     @Override
     public void remove(int id) {
 
-        Node<Task> deleteNode = historyTask.get(id); //11
+        if (historyTask.get(id) != null) {
 
-        Task data = deleteNode.data;
-        Node<Task> next = deleteNode.next;
-        Node<Task> prev = deleteNode.prev;
+            Node<Task> deleteNode = historyTask.get(id);
 
-        if (prev == null) {
-            head = next;
-        } else {
-            prev.next = next;
-            deleteNode.prev = null;
+            Task data = deleteNode.data;
+            Node<Task> next = deleteNode.next;
+            Node<Task> prev = deleteNode.prev;
+
+            if (prev == null) {
+                head = next;
+            } else {
+                prev.next = next;
+                deleteNode.prev = null;
+            }
+
+            if (next == null) {
+                tail = prev;
+            } else {
+                next.prev = prev;
+                deleteNode.next = null;
+            }
+
+            deleteNode.data = null;
+            size--;
         }
-
-        if (next == null) {
-            tail = prev;
-        } else {
-            next.prev = prev;
-            deleteNode.next = null;
-        }
-
-        deleteNode.data = null;
-        size--;
     }
 }
