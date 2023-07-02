@@ -12,8 +12,11 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return "\n" + "Имя подзадачи': '" + nameTask + "', описание подзадачи': '" + descriptionTask
-                + "', статус подзадачи: '" + statusTask + "', ИД подзадачи: '" + idTask
-                + "', ИД эпика подзадачи: " + idEpic;
+        return idTask + ","
+                + Type.SUBTASK + ","
+                + nameTask + ","
+                + statusTask + ","
+                + descriptionTask + ","
+                + idEpic + "\n";
     }
 }

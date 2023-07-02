@@ -1,3 +1,4 @@
+import logic.FileBackedTasksManager;
 import logic.Managers;
 import logic.TaskManager;
 import task.StatusTask;
@@ -11,7 +12,7 @@ public class Main {
 
         for (int i = 1; i <= 2; i++) {
             Task task = new Task();
-            task.setNameTask("Задача  " + i + ".");
+            task.setNameTask("Задача " + i + ".");
             task.setDescriptionTask("Описание задачи " + i + ".");
             task.setStatusTask(StatusTask.NEW);
             taskManager.createTask(task);
@@ -38,6 +39,23 @@ public class Main {
         System.out.println("Кол-во созданных подзадач: " + taskManager.getAllSubTask().size());
 
         Task task = taskManager.getTask(2);
+        Task task1 = taskManager.getTask(1);
+        Subtask subtask = taskManager.getSubTaskId(5);
+
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
+
+        System.out.print(fileBackedTasksManager.toString(task));
+        System.out.print(fileBackedTasksManager.toString(task1));
+        System.out.print(fileBackedTasksManager.toString(subtask));
+
+
+
+        fileBackedTasksManager.fromString(fileBackedTasksManager.toString(task));
+
+
+
+
+        /*Task task = taskManager.getTask(2);
         Task task1 = taskManager.getTask(1);
 
         System.out.println(taskManager.getHistory());
@@ -69,6 +87,6 @@ public class Main {
 
         taskManager.deleteEpicId(3);
 
-        System.out.println(taskManager.getHistory());
+        System.out.println(taskManager.getHistory());*/
     }
 }

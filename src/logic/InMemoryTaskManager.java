@@ -194,6 +194,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
@@ -228,5 +233,36 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatusTask(StatusTask.DONE);
         }
+    }
+
+    public void setTaskId (int idTask) {
+        this.idTask = idTask;
+    }
+
+    private static final String HEADER = "id,type,name,status,description,epic\n";
+
+    @Override
+    public String serialize() {
+
+        StringBuilder content = new StringBuilder(HEADER);
+
+        for (Task task : tasks.values()) {
+            content.append(toString(task));
+        }
+
+        for (Epic epic : epics.values()) {
+            content.append(toString(epic));
+        }
+
+        for (Subtask subtask : subTasks.values()) {
+            content.append(toString(subtask));
+        }
+
+        return content.toString();
+    }
+
+    @Override
+    public String toString(Task task) {
+        return task.toString();
     }
 }

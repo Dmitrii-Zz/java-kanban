@@ -40,7 +40,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return "\n" + "Имя задачи: '" + nameTask + "', описание задачи: '" + descriptionTask + "', статус задачи: '"
-                + statusTask + "', ИД задачи: '" + idTask + "'";
+        return idTask + ","
+                + Type.TASK + ","
+                + nameTask + ","
+                + statusTask + ","
+                + descriptionTask + ",\n";
     }
 }

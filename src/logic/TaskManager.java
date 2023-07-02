@@ -24,4 +24,7 @@ public interface TaskManager {
     void deleteSubTaskId(int idSubTask);
     Subtask getSubTaskId(int idSubTask);
     List<Task> getHistory();
+    String serialize();
+    String toString(Task task);
+    HistoryManager getHistoryManager();
 }
