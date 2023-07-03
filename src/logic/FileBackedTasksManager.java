@@ -199,7 +199,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return idTaskHistory;
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) {
+    public static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
 
         FileBackedTasksManager backedTasksManager = new FileBackedTasksManager();
         int idMax = 0;
@@ -243,7 +243,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             backedTasksManager.setTaskId(idMax);
 
-            List<Integer> idTaskHistory = historyFromString(contentSplit[1]);
+            List<Integer> idTaskHistory = new ArrayList<>();
+
+            if (contentSplit.length > 1) {
+                idTaskHistory = historyFromString(contentSplit[1]);
+            }
 
             for (int id : idTaskHistory) {
                 backedTasksManager.getTask(id);
@@ -252,7 +256,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            throw new ManagerSaveException("Ошибка чтения файла!");
         }
         return backedTasksManager;
     }
