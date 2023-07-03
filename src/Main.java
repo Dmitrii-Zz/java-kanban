@@ -1,11 +1,12 @@
 import logic.FileBackedTasksManager;
+import logic.ManagerSaveException;
 import logic.Managers;
 import logic.TaskManager;
 import task.StatusTask;
 import task.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ManagerSaveException {
         System.out.println("Поехали!");
 
         TaskManager taskManager = Managers.getDefault();
@@ -44,13 +45,13 @@ public class Main {
 
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
 
-        System.out.print(fileBackedTasksManager.toString(task));
+        /*System.out.print(fileBackedTasksManager.toString(task));
         System.out.print(fileBackedTasksManager.toString(task1));
         System.out.print(fileBackedTasksManager.toString(subtask));
 
 
 
-        fileBackedTasksManager.fromString(fileBackedTasksManager.toString(task));
+        fileBackedTasksManager.fromString(fileBackedTasksManager.toString(task));*/
 
 
 
