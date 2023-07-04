@@ -5,6 +5,7 @@ public class Task {
     protected String descriptionTask;
     protected StatusTask statusTask;
     protected int idTask;
+    protected Type typeTask;
 
     public void setNameTask(String nameTask) {
         this.nameTask = nameTask;
@@ -38,12 +39,17 @@ public class Task {
         return statusTask;
     }
 
+    public Type getTypeTask() {
+        return typeTask;
+    }
+
+    public void setTypeTask(Type typeTask) {
+        this.typeTask = typeTask;
+    }
+
     @Override
     public String toString() {
-        return idTask + ","
-                + Type.TASK + ","
-                + nameTask + ","
-                + statusTask + ","
-                + descriptionTask + ",\n";
+        return "\n" + "Имя задачи: '" + nameTask + "', описание задачи: '" + descriptionTask + "', статус задачи: '"
+                + statusTask + "', ИД задачи: '" + idTask + "'";
     }
 }

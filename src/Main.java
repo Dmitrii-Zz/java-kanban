@@ -6,7 +6,7 @@ import task.StatusTask;
 import task.*;
 
 public class Main {
-    public static void main(String[] args) throws ManagerSaveException {
+    public static void main(String[] args) {
         System.out.println("Поехали!");
 
         TaskManager taskManager = Managers.getDefault();
@@ -43,51 +43,8 @@ public class Main {
         Task task1 = taskManager.getTask(1);
         Subtask subtask = taskManager.getSubTaskId(5);
 
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
+        FileBackedTasksManager fileBackedTasksManager =
+                new FileBackedTasksManager("./src/resources/Resources.csv");
 
-        /*System.out.print(fileBackedTasksManager.toString(task));
-        System.out.print(fileBackedTasksManager.toString(task1));
-        System.out.print(fileBackedTasksManager.toString(subtask));
-
-
-
-        fileBackedTasksManager.fromString(fileBackedTasksManager.toString(task));*/
-
-
-
-
-        /*Task task = taskManager.getTask(2);
-        Task task1 = taskManager.getTask(1);
-
-        System.out.println(taskManager.getHistory());
-
-        Task task2 = taskManager.getTask(1);
-        Task task3 = taskManager.getTask(2);
-
-        System.out.println(taskManager.getHistory());
-
-        Epic epic = taskManager.getEpicId(4);
-        Task task4 = taskManager.getTask(1);
-
-        System.out.println(taskManager.getHistory());
-
-        Epic epic1 = taskManager.getEpicId(3);
-        Task task5 = taskManager.getTask(2);
-
-        System.out.println(taskManager.getHistory());
-
-        Subtask subtask = taskManager.getSubTaskId(5);
-        Subtask subtask1 = taskManager.getSubTaskId(6);
-        Subtask subtask2 = taskManager.getSubTaskId(7);
-
-        System.out.println(taskManager.getHistory());
-
-        taskManager.deleteTaskId(1);
-
-        System.out.println(taskManager.getHistory());
-
-        taskManager.deleteEpicId(3);
-
-        System.out.println(taskManager.getHistory());*/
     }
 }
