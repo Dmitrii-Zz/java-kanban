@@ -19,125 +19,125 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void createTask(Task task) {
         super.createTask(task);
-        Save();
+        save();
     }
 
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
-        Save();
+        save();
     }
 
     @Override
     public void deleteTask() {
         super.deleteTask();
-        Save();
+        save();
     }
 
     @Override
     public void deleteTaskId(int idTask) {
         super.deleteTaskId(idTask);
-        Save();
+        save();
     }
 
     @Override
     public Task getTask(int idTask) {
         Task task = super.getTask(idTask);
-        Save();
+        save();
         return task;
     }
 
     @Override
     public List<Task> getAllTask() {
         List<Task> tasks = super.getAllTask();
-        Save();
+        save();
         return tasks;
     }
 
     @Override
     public void createEpic(Epic epic) {
         super.createEpic(epic);
-        Save();
+        save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
-        Save();
+        save();
     }
 
     @Override
     public void deleteEpic() {
         super.deleteEpic();
-        Save();
+        save();
     }
 
     @Override
     public void deleteEpicId(int idEpic) {
         super.deleteEpicId(idEpic);
-        Save();
+        save();
     }
 
     @Override
     public Epic getEpicId(int idEpic) {
         Epic epic = super.getEpicId(idEpic);
-        Save();
+        save();
         return epic;
     }
 
     @Override
     public List<Epic> getAllEpic() {
         List<Epic> epics = super.getAllEpic();
-        Save();
+        save();
         return epics;
     }
 
     @Override
     public void createSubTask(Subtask subtask) {
         super.createSubTask(subtask);
-        Save();
+        save();
     }
 
     @Override
     public void updateSubTask(Subtask subtask) {
         super.updateSubTask(subtask);
-        Save();
+        save();
     }
 
     @Override
     public void deleteSubTask() {
         super.deleteSubTask();
-        Save();
+        save();
     }
 
     @Override
     public void deleteSubTaskId(int idSubTask) {
         super.deleteSubTaskId(idSubTask);
-        Save();
+        save();
     }
 
     @Override
     public Subtask getSubTaskId(int idSubTask) {
         Subtask subtask = super.getSubTaskId(idSubTask);
-        Save();
+        save();
         return subtask;
     }
 
     @Override
     public List<Subtask> getAllSubTask() {
         List<Subtask> subtasks = super.getAllSubTask();
-        Save();
+        save();
         return subtasks;
     }
 
     @Override
     public List<Subtask> getAllSubTaskEpicId(int idEpic) {
         List<Subtask> subtasks = super.getAllSubTaskEpicId(idEpic);
-        Save();
+        save();
         return subtasks;
     }
 
-    private void Save() {
+    private void save() {
 
         File file = new File(path);
 
@@ -153,7 +153,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         int idMax = 0;
         FileBackedTasksManager backedTasksManager = new FileBackedTasksManager("./src/resources/Resources.csv");
-        CSVTaskFormatter csvTaskFormatter = new CSVTaskFormatter("./src/resources/Resources.csv");
         StringBuilder content = new StringBuilder();
 
         try {
@@ -176,15 +175,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 switch (typeTask) {
                     case TASK:
                         backedTasksManager.tasks.put(Integer.parseInt(valueLine[0]),
-                                csvTaskFormatter.fromString(taskContent[i]));
+                                CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                     case EPIC:
                         backedTasksManager.epics.put(Integer.parseInt(valueLine[0]),
-                                (Epic) csvTaskFormatter.fromString(taskContent[i]));
+                                (Epic) CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                     case SUBTASK:
                         backedTasksManager.subTasks.put(Integer.parseInt(valueLine[0]),
-                                (Subtask) csvTaskFormatter.fromString(taskContent[i]));
+                                (Subtask) CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                 }
 
@@ -217,18 +216,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private String serialize() {
 
         StringBuilder content = new StringBuilder(HEADER);
-        CSVTaskFormatter csvTaskFormatter = new CSVTaskFormatter("./src/resources/Resources.csv");
 
         for (Task task : tasks.values()) {
-            content.append(csvTaskFormatter.toString(task));
+            content.append(CSVTaskFormatter.toString(task));
         }
 
         for (Epic epic : epics.values()) {
-            content.append(csvTaskFormatter.toString(epic));
+            content.append(CSVTaskFormatter.toString(epic));
         }
 
         for (Subtask subtask : subTasks.values()) {
-            content.append(csvTaskFormatter.toString(subtask));
+            content.append(CSVTaskFormatter.toString(subtask));
         }
 
         return content.toString();
@@ -275,6 +273,5 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println(task3);
         System.out.println(subtask1);
-
     }
 }
