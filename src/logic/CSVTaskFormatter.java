@@ -5,13 +5,9 @@ import task.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVTaskFormatter extends FileBackedTasksManager {
+public class CSVTaskFormatter {
 
-    public CSVTaskFormatter(String path) {
-        super(path);
-    }
-
-    protected Task fromString(String value) {
+    public static Task fromString(String value) {
         String[] valueLine = value.split(",");
         int idTask = Integer.parseInt(valueLine[0]);
         Type typeTask = Type.valueOf(valueLine[1]);
@@ -50,7 +46,7 @@ public class CSVTaskFormatter extends FileBackedTasksManager {
         return null;
     }
 
-    protected static String historyToString(HistoryManager manager) {
+    public static String historyToString(HistoryManager manager) {
         List<Task> history = manager.getHistory();
         StringBuilder content = new StringBuilder("\n");
 
@@ -62,7 +58,7 @@ public class CSVTaskFormatter extends FileBackedTasksManager {
         return content.deleteCharAt(content.length() - 1).toString();
     }
 
-    protected static List<Integer> historyFromString(String value) {
+    public static List<Integer> historyFromString(String value) {
 
         String[] idTask = value.split(",");
         List<Integer> idTaskHistory = new ArrayList<>();
@@ -74,7 +70,7 @@ public class CSVTaskFormatter extends FileBackedTasksManager {
         return idTaskHistory;
     }
 
-    protected String toString(Task task) {
+    public static String toString(Task task) {
 
         Type typeTask = task.getTypeTask();
 
