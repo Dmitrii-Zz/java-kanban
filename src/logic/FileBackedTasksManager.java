@@ -1,15 +1,19 @@
 package logic;
 
 import task.*;
-
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    private static final String HEADER = "id,type,name,status,description,epic\n";
+    private static final String HEADER = "id," +
+            "type,name,status,description,taskDuration,startTime,endTime,crossTask,idEpic/idSubTask\n";
+    private static final int TYPE_TASK = 1;
+    private static final int HISTORY_ID = 0;
+    private static final int ID_TASK = 0;
+    private static final int IS_HISTORY = 1;
     private final String path;
 
     public FileBackedTasksManager(String path) {
@@ -18,12 +22,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public void createTask(Task task) {
+        checkDataTime(task);
         super.createTask(task);
         save();
     }
 
     @Override
     public void updateTask(Task task) {
+        checkDataTime(task);
         super.updateTask(task);
         save();
     }
@@ -94,12 +100,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public void createSubTask(Subtask subtask) {
+        checkDataTime(subtask);
         super.createSubTask(subtask);
         save();
     }
 
     @Override
     public void updateSubTask(Subtask subtask) {
+        checkDataTime(subtask);
         super.updateSubTask(subtask);
         save();
     }
@@ -152,7 +160,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public static FileBackedTasksManager loadFromFile(File file) {
 
         int idMax = 0;
-        FileBackedTasksManager backedTasksManager = new FileBackedTasksManager("./src/resources/Resources.csv");
+        FileBackedTasksManager backedTasksManager = new FileBackedTasksManager(file.getPath());
         StringBuilder content = new StringBuilder();
 
         try {
@@ -166,29 +174,31 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
 
             String[] contentSplit = content.toString().split("\n\n");
-            String[] taskContent = contentSplit[0].split("\n");
+            String[] taskContent = contentSplit[HISTORY_ID].split("\n");
 
             for (int i = 1; i < taskContent.length; i++) {
                 String[] valueLine = taskContent[i].split(",");
-                Type typeTask = Type.valueOf(valueLine[1]);
+                Type typeTask = Type.valueOf(valueLine[TYPE_TASK]);
 
                 switch (typeTask) {
                     case TASK:
-                        backedTasksManager.tasks.put(Integer.parseInt(valueLine[0]),
+                        backedTasksManager.tasks.put(Integer.parseInt(valueLine[ID_TASK]),
                                 CSVTaskFormatter.fromString(taskContent[i]));
+                        backedTasksManager.taskSortPriority.add(CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                     case EPIC:
-                        backedTasksManager.epics.put(Integer.parseInt(valueLine[0]),
+                        backedTasksManager.epics.put(Integer.parseInt(valueLine[ID_TASK]),
                                 (Epic) CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                     case SUBTASK:
-                        backedTasksManager.subTasks.put(Integer.parseInt(valueLine[0]),
+                        backedTasksManager.subTasks.put(Integer.parseInt(valueLine[ID_TASK]),
                                 (Subtask) CSVTaskFormatter.fromString(taskContent[i]));
+                        backedTasksManager.taskSortPriority.add((Subtask) CSVTaskFormatter.fromString(taskContent[i]));
                         break;
                 }
 
-                if (Integer.parseInt(valueLine[0]) > idMax) {
-                    idMax = Integer.parseInt(valueLine[0]);
+                if (Integer.parseInt(valueLine[ID_TASK]) > idMax) {
+                    idMax = Integer.parseInt(valueLine[ID_TASK]);
                 }
             }
 
@@ -196,7 +206,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             List<Integer> idTaskHistory = new ArrayList<>();
 
-            if (contentSplit.length > 1) {
+            if (contentSplit.length > IS_HISTORY) {
                 idTaskHistory = CSVTaskFormatter.historyFromString(contentSplit[1]);
             }
 
@@ -237,41 +247,59 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         File file = new File("./src/resources/Resources.csv");
         FileBackedTasksManager backedTask = FileBackedTasksManager.loadFromFile(file);
 
-        for (int i = 1; i <= 2; i++) {
-            Task task = new Task();
-            task.setNameTask("Задача " + i + ".");
-            task.setDescriptionTask("Описание задачи " + i + ".");
-            task.setStatusTask(StatusTask.NEW);
-            backedTask.createTask(task);
-        }
+        Task task = new Task();
+        task.setNameTask("Задача 1.");
+        task.setDescriptionTask("Описание задачи 1.");
+        task.setStatusTask(StatusTask.NEW);
+        task.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
+        task.setTaskDuration(30);
+        backedTask.createTask(task);
 
-        for (int i = 1; i <= 2; i++) {
-            Epic epic = new Epic();
-            epic.setNameTask("Эпик " + i + ".");
-            epic.setDescriptionTask("Описание эпика " + i + ".");
-            backedTask.createEpic(epic);
-        }
+        Task task1 = new Task();
+        task1.setNameTask("Задача 2.");
+        task1.setDescriptionTask("Описание задачи 2.");
+        task1.setStatusTask(StatusTask.NEW);
+        task1.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
+        task1.setTaskDuration(30);
+        backedTask.createTask(task1);
 
-        for (int i = 3; i <= 4; i++) {
-            Subtask subtask = new Subtask();
-            subtask.setNameTask("Подзадача " + i);
-            subtask.setDescriptionTask("Описание подзадачи " + i);
-            subtask.setStatusTask(StatusTask.DONE);
-            subtask.setIdEpic(i);
-            backedTask.createSubTask(subtask);
-        }
+        Epic epic = new Epic();
+        epic.setNameTask("Эпик 1.");
+        epic.setDescriptionTask("Описание эпика 1.");
+        backedTask.createEpic(epic);
+
+        Subtask subtask = new Subtask();
+        subtask.setNameTask("Подзадача 1");
+        subtask.setDescriptionTask("Описание подзадачи 1");
+        subtask.setStatusTask(StatusTask.DONE);
+        subtask.setIdEpic(3);
+        subtask.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 45));
+        subtask.setTaskDuration(30);
+        backedTask.createSubTask(subtask);
 
         System.out.println("Кол-во созданных задач: " + backedTask.getAllTask().size());
         System.out.println("Кол-во созданных эпиков: " + backedTask.getAllEpic().size());
         System.out.println("Кол-во созданных подзадач: " + backedTask.getAllSubTask().size());
 
-        Task task = backedTask.getTask(1);
-        Task task3 = backedTask.getTask(2);
-        Epic epic = backedTask.getEpicId(3);
-        Subtask subtask = backedTask.getSubTaskId(5);
-        Subtask subtask1 = backedTask.getSubTaskId(6);
+        Task task2 = backedTask.getTask(1);
+        Epic epic2 = backedTask.getEpicId(3);
+        Subtask subtask1 = backedTask.getSubTaskId(4);
 
-        System.out.println(task3);
-        System.out.println(subtask1);
+        for (Task t : backedTask.taskSortPriority) {
+            System.out.println(t);
+        }
+    }
+
+    public void checkDataTime(Task task) {
+
+        for (Task t : taskSortPriority) {
+
+            if (task.getStartTime().equals(t.getStartTime())) {
+                task.setIsCrossTask(true);
+                return;
+            } else {
+                task.setIsCrossTask(false);
+            }
+        }
     }
 }

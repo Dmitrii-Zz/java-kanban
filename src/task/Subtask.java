@@ -1,5 +1,7 @@
 package task;
 
+import java.util.Objects;
+
 public class Subtask extends Task {
     private int idEpic;
 
@@ -12,8 +14,24 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return "\n" + "Имя подзадачи': '" + nameTask + "', описание подзадачи': '" + descriptionTask
+        return "Имя подзадачи': '" + nameTask + "', описание подзадачи': '" + descriptionTask
                 + "', статус подзадачи: '" + statusTask + "', ИД подзадачи: '" + idTask
-                + "', ИД эпика подзадачи: " + idEpic;
+                + "', ИД эпика подзадачи: '" + idEpic + "', start time: '" + startTime
+                + "', duration: '" + taskDuration + "', пересечение: " + isCrossTask + "'";
+    }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subtask task = (Subtask) o;
+        return Objects.equals(nameTask, task.nameTask)
+                && Objects.equals(descriptionTask, task.descriptionTask)
+                && Objects.equals(statusTask, task.statusTask)
+                && idTask == task.idTask
+                && Objects.equals(typeTask, task.typeTask)
+                && taskDuration == task.taskDuration
+                && Objects.equals(startTime, task.startTime)
+                && idEpic == task.idEpic;
     }
 }
