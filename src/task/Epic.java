@@ -34,7 +34,6 @@ public class Epic extends Task {
                 && Objects.equals(descriptionTask, task.descriptionTask)
                 && Objects.equals(statusTask, task.statusTask)
                 && idTask == task.idTask
-                && Objects.equals(typeTask, task.typeTask)
                 && Objects.equals(idSubTasks, task.idSubTasks)
                 && taskDuration == task.taskDuration
                 && Objects.equals(startTime, task.startTime)
@@ -51,5 +50,10 @@ public class Epic extends Task {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public Type getTypeTask() {
+        return Type.EPIC;
     }
 }

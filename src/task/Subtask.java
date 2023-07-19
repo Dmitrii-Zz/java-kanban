@@ -17,7 +17,7 @@ public class Subtask extends Task {
         return "Имя подзадачи': '" + nameTask + "', описание подзадачи': '" + descriptionTask
                 + "', статус подзадачи: '" + statusTask + "', ИД подзадачи: '" + idTask
                 + "', ИД эпика подзадачи: '" + idEpic + "', start time: '" + startTime
-                + "', duration: '" + taskDuration + "', пересечение: " + isCrossTask + "'";
+                + "', duration: '" + taskDuration + "'";
     }
 
     @Override
@@ -29,9 +29,13 @@ public class Subtask extends Task {
                 && Objects.equals(descriptionTask, task.descriptionTask)
                 && Objects.equals(statusTask, task.statusTask)
                 && idTask == task.idTask
-                && Objects.equals(typeTask, task.typeTask)
                 && taskDuration == task.taskDuration
                 && Objects.equals(startTime, task.startTime)
                 && idEpic == task.idEpic;
+    }
+
+    @Override
+    public Type getTypeTask() {
+        return Type.SUBTASK;
     }
 }

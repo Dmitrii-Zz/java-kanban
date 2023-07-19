@@ -9,7 +9,7 @@ import java.util.List;
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static final String HEADER = "id," +
-            "type,name,status,description,taskDuration,startTime,endTime,crossTask,idEpic/idSubTask\n";
+            "type,name,status,description,taskDuration,startTime,endTime,idEpic/idSubTask\n";
     private static final int TYPE_TASK = 1;
     private static final int HISTORY_ID = 0;
     private static final int ID_TASK = 0;
@@ -22,14 +22,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public void createTask(Task task) {
-        checkDataTime(task);
         super.createTask(task);
         save();
     }
 
     @Override
     public void updateTask(Task task) {
-        checkDataTime(task);
         super.updateTask(task);
         save();
     }
@@ -100,14 +98,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public void createSubTask(Subtask subtask) {
-        checkDataTime(subtask);
         super.createSubTask(subtask);
         save();
     }
 
     @Override
     public void updateSubTask(Subtask subtask) {
-        checkDataTime(subtask);
         super.updateSubTask(subtask);
         save();
     }
@@ -259,7 +255,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         task1.setNameTask("Задача 2.");
         task1.setDescriptionTask("Описание задачи 2.");
         task1.setStatusTask(StatusTask.NEW);
-        task1.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
+        task1.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 30));
         task1.setTaskDuration(30);
         backedTask.createTask(task1);
 
@@ -277,29 +273,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask.setTaskDuration(30);
         backedTask.createSubTask(subtask);
 
+        Subtask subtask1 = new Subtask();
+        subtask1.setNameTask("Подзадача 2");
+        subtask1.setDescriptionTask("Описание подзадачи 2");
+        subtask1.setStatusTask(StatusTask.NEW);
+        subtask1.setIdEpic(3);
+        subtask1.setStartTime(LocalDateTime.of(2025, 1, 3, 12, 0));
+        subtask1.setTaskDuration(45);
+        backedTask.createSubTask(subtask1);
+
         System.out.println("Кол-во созданных задач: " + backedTask.getAllTask().size());
         System.out.println("Кол-во созданных эпиков: " + backedTask.getAllEpic().size());
         System.out.println("Кол-во созданных подзадач: " + backedTask.getAllSubTask().size());
 
         Task task2 = backedTask.getTask(1);
         Epic epic2 = backedTask.getEpicId(3);
-        Subtask subtask1 = backedTask.getSubTaskId(4);
+        Subtask subtask2 = backedTask.getSubTaskId(4);
 
         for (Task t : backedTask.taskSortPriority) {
             System.out.println(t);
-        }
-    }
-
-    public void checkDataTime(Task task) {
-
-        for (Task t : taskSortPriority) {
-
-            if (task.getStartTime().equals(t.getStartTime())) {
-                task.setIsCrossTask(true);
-                return;
-            } else {
-                task.setIsCrossTask(false);
-            }
         }
     }
 }

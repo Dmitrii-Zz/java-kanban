@@ -9,11 +9,8 @@ public class Task {
     protected String descriptionTask;
     protected StatusTask statusTask;
     protected int idTask;
-    protected Type typeTask;
     protected int taskDuration;
     protected LocalDateTime startTime;
-    protected boolean isCrossTask;
-
 
     public void setNameTask(String nameTask) {
         this.nameTask = nameTask;
@@ -48,18 +45,14 @@ public class Task {
     }
 
     public Type getTypeTask() {
-        return typeTask;
-    }
-
-    public void setTypeTask(Type typeTask) {
-        this.typeTask = typeTask;
+        return Type.TASK;
     }
 
     @Override
     public String toString() {
         return "Имя задачи: '" + nameTask + "', описание задачи: '" + descriptionTask + "', статус задачи: '"
                 + statusTask + "', ИД задачи: '" + idTask + "', start time: '" + startTime
-                + "', duration: '" + taskDuration + "', пересечение: '" + isCrossTask + "'";
+                + "', duration: '" + taskDuration + "'";
     }
 
     @Override
@@ -71,7 +64,6 @@ public class Task {
                 && Objects.equals(descriptionTask, task.descriptionTask)
                 && Objects.equals(statusTask, task.statusTask)
                 && idTask == task.idTask
-                && Objects.equals(typeTask, task.typeTask)
                 && taskDuration == task.taskDuration
                 && Objects.equals(startTime, task.startTime);
     }
@@ -100,11 +92,4 @@ public class Task {
         return taskDuration;
     }
 
-    public void setIsCrossTask(boolean isCross) {
-        this.isCrossTask = isCross;
-    }
-
-    public boolean getIsCrossTask() {
-        return isCrossTask;
-    }
 }

@@ -20,7 +20,6 @@ public class FileBackedTasksManagerTest {
 
         Task task = new Task();
         task.setIdTask(1);
-        task.setTypeTask(Type.TASK);
         task.setNameTask("Задача 1.");
         task.setDescriptionTask("Описание задачи 1.");
         task.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
@@ -37,7 +36,6 @@ public class FileBackedTasksManagerTest {
 
         Epic epic = new Epic();
         epic.setIdTask(2);
-        epic.setTypeTask(Type.EPIC);
         epic.setNameTask("Эпик 1.");
         epic.setDescriptionTask("Описание эпика 1.");
         epic.setStatusTask(StatusTask.DONE);
@@ -49,11 +47,10 @@ public class FileBackedTasksManagerTest {
     @Test
     public void loadSubtaskFromFileTest() {
         List<Subtask> allSubtask = backedTask.getAllSubTask();
-        assertEquals(1, allSubtask.size(), "Неверное кол-во");
+        assertEquals(2, allSubtask.size(), "Неверное кол-во");
 
         Subtask subtask = new Subtask();
         subtask.setIdTask(4);
-        subtask.setTypeTask(Type.SUBTASK);
         subtask.setNameTask("Подзадача 1");
         subtask.setDescriptionTask("Описание подзадачи 1");
         subtask.setStatusTask(StatusTask.DONE);

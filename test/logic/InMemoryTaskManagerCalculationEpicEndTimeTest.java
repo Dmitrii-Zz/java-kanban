@@ -48,7 +48,7 @@ public class InMemoryTaskManagerCalculationEpicEndTimeTest {
         taskManager.createSubTask(subtask3);
 
         LocalDateTime expectedStartDataTime = LocalDateTime.of(2024, 1, 1,12,0);
-        LocalDateTime expectedEndDataTime = LocalDateTime.of(2024, 1, 1, 13, 0);
+        LocalDateTime expectedEndDataTime = LocalDateTime.of(2024, 5, 1, 12, 20);
 
         Optional<LocalDateTime> dataTime = epic.getStartTime();
         Optional<LocalDateTime> dataEndTime = epic.getEndTime();

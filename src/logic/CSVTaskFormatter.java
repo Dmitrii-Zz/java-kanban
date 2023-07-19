@@ -17,8 +17,7 @@ public class CSVTaskFormatter {
     private static final int DURATION_TASK = 5;
     private static final int START_TIME_TASK = 6;
     private static final int END_TIME_TASK = 7;
-    private static final int CROSS_TASK = 8;
-    private static final int ID_SUB_TASK = 9;
+    private static final int ID_SUB_TASK = 8;
 
     public static Task fromString(String value) {
         String[] valueLine = value.split(",");
@@ -28,18 +27,15 @@ public class CSVTaskFormatter {
         StatusTask status = StatusTask.valueOf(valueLine[STATUS_TASK]);
         String descriptionTask = valueLine[DESCRIPTION_TASK];
         int taskDuration = Integer.parseInt(valueLine[DURATION_TASK]);
-        boolean crossTask = Boolean.parseBoolean(valueLine[CROSS_TASK]);
 
         switch (typeTask) {
             case TASK:
                 Task task = new Task();
                 task.setIdTask(idTask);
-                task.setTypeTask(typeTask);
                 task.setNameTask(nameTask);
                 task.setStatusTask(status);
                 task.setDescriptionTask(descriptionTask);
                 task.setTaskDuration(taskDuration);
-                task.setIsCrossTask(crossTask);
 
                 if (!valueLine[START_TIME_TASK].equals("null")) {
                     task.setStartTime(LocalDateTime.parse(valueLine[START_TIME_TASK]));
@@ -48,12 +44,10 @@ public class CSVTaskFormatter {
             case EPIC:
                 Epic epic = new Epic();
                 epic.setIdTask(idTask);
-                epic.setTypeTask(typeTask);
                 epic.setNameTask(nameTask);
                 epic.setStatusTask(status);
                 epic.setDescriptionTask(descriptionTask);
                 epic.setTaskDuration(taskDuration);
-                epic.setIsCrossTask(crossTask);
 
                 if (!valueLine[START_TIME_TASK].equals("null")) {
                     epic.setStartTime(LocalDateTime.parse(valueLine[START_TIME_TASK]));
@@ -78,14 +72,12 @@ public class CSVTaskFormatter {
             case SUBTASK:
                 Subtask subtask = new Subtask();
                 subtask.setIdTask(idTask);
-                subtask.setTypeTask(typeTask);
                 subtask.setNameTask(nameTask);
                 subtask.setStatusTask(status);
                 subtask.setDescriptionTask(descriptionTask);
                 int idEpic = Integer.parseInt(valueLine[ID_SUB_TASK]);
                 subtask.setIdEpic(idEpic);
                 subtask.setTaskDuration(taskDuration);
-                subtask.setIsCrossTask(crossTask);
 
                 if (!valueLine[START_TIME_TASK].equals("null")) {
                     subtask.setStartTime(LocalDateTime.parse(valueLine[START_TIME_TASK]));
@@ -156,8 +148,6 @@ public class CSVTaskFormatter {
             taskToString.append("null");
         }
 
-        taskToString.append(",");
-        taskToString.append(task.getIsCrossTask());
         taskToString.append(",");
         switch (typeTask) {
             case TASK:

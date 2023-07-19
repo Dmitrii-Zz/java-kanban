@@ -19,14 +19,12 @@ public class CSVTaskFormatterTest {
         task.setDescriptionTask("Описание задачи 1.");
         task.setStatusTask(StatusTask.NEW);
         task.setIdTask(1);
-        task.setTypeTask(Type.TASK);
         task.setTaskDuration(30);
         task.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
-        task.setIsCrossTask(false);
         String taskContent = CSVTaskFormatter.toString(task);
 
         String expectedTaskContent =
-                "1,TASK,Задача 1.,NEW,Описание задачи 1.,30,2025-01-01T12:30,2025-01-01T13:00,false,\n";
+                "1,TASK,Задача 1.,NEW,Описание задачи 1.,30,2025-01-01T12:30,2025-01-01T13:00,\n";
         assertEquals(expectedTaskContent, taskContent, "Контент не совпадает.");
     }
 
@@ -35,15 +33,16 @@ public class CSVTaskFormatterTest {
         Epic epic = new Epic();
         epic.setNameTask("Эпик 1.");
         epic.setDescriptionTask("Описание эпика 1.");
-        epic.setStatusTask(StatusTask.DONE);
+        epic.setStatusTask(StatusTask.IN_PROGRESS);
         epic.setIdTask(3);
-        epic.setTypeTask(Type.EPIC);
-        epic.setIdSubTasks(List.of(4));
-        epic.setIsCrossTask(false);
-        epic.setTaskDuration(30);
+        epic.setIdSubTasks(List.of(4, 5));
+        epic.setTaskDuration(75);
+        epic.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 45));
+        epic.setEndTime(LocalDateTime.of(2025, 1, 3, 12,45));
         String epicContent = CSVTaskFormatter.toString(epic);
 
-        String expectedEpicContent = "3,EPIC,Эпик 1.,DONE,Описание эпика 1.,30,null,null,false,4-\n";
+        String expectedEpicContent =
+                "3,EPIC,Эпик 1.,IN_PROGRESS,Описание эпика 1.,75,2025-01-02T12:45,2025-01-03T12:45,4-5-\n";
         assertEquals(expectedEpicContent, epicContent, "Контент различается");
     }
 
@@ -55,13 +54,12 @@ public class CSVTaskFormatterTest {
         subtask.setDescriptionTask("Описание подзадачи 1");
         subtask.setIdEpic(3);
         subtask.setIdTask(4);
-        subtask.setTypeTask(Type.SUBTASK);
         subtask.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 45));
         subtask.setTaskDuration(30);
         String subTaskContent = CSVTaskFormatter.toString(subtask);
 
         String expectedSubtaskContent =
-                "4,SUBTASK,Подзадача 1,DONE,Описание подзадачи 1,30,2025-01-02T12:45,2025-01-02T13:15,false,3\n";
+                "4,SUBTASK,Подзадача 1,DONE,Описание подзадачи 1,30,2025-01-02T12:45,2025-01-02T13:15,3\n";
         assertEquals(expectedSubtaskContent, subTaskContent, "Строки не равны.");
     }
 
@@ -72,7 +70,6 @@ public class CSVTaskFormatterTest {
         task.setDescriptionTask("Описание новой задачи.");
         task.setStatusTask(StatusTask.NEW);
         task.setIdTask(1);
-        task.setTypeTask(Type.TASK);
         historyManagers.addTask(task);
 
         Task task1 = new Task();
@@ -80,7 +77,6 @@ public class CSVTaskFormatterTest {
         task1.setDescriptionTask("Описание новой задачи.");
         task1.setStatusTask(StatusTask.NEW);
         task1.setIdTask(2);
-        task1.setTypeTask(Type.TASK);
         historyManagers.addTask(task1);
 
         String contentHistory = CSVTaskFormatter.historyToString(historyManagers);
@@ -91,7 +87,7 @@ public class CSVTaskFormatterTest {
 
     @Test
     public void TaskFromStringTaskTest() {
-        String taskContent = "1,TASK,Задача 1.,NEW,Описание задачи 1.,30,2025-01-01T12:30,2025-01-01T13:00,false,";
+        String taskContent = "1,TASK,Задача 1.,NEW,Описание задачи 1.,30,2025-01-01T12:30,2025-01-01T13:00,";
         Task task = CSVTaskFormatter.fromString(taskContent);
 
         assertAll("сравнение полей задачи,",
@@ -106,14 +102,14 @@ public class CSVTaskFormatterTest {
 
     @Test
     public void TaskFromStringEpicTest() {
-        String epicContent = "2,EPIC,Эпик 1.,DONE,Описание эпика 1.,30,2025-01-02T12:45,2025-01-02T13:15,3-";
+        String epicContent = "3,EPIC,Эпик 1.,IN_PROGRESS,Описание эпика 1.,75,2025-01-02T12:45,2025-01-03T12:45,4-5-";
         Task epic = CSVTaskFormatter.fromString(epicContent);
 
         assertAll("сравнение полей задачи,",
-                () -> assertEquals(2, epic.getIdTask(), "ИД не равны"),
+                () -> assertEquals(3, epic.getIdTask(), "ИД не равны"),
                 () -> assertEquals(Type.EPIC, epic.getTypeTask(), "Типы не равны"),
                 () -> assertEquals("Эпик 1.", epic.getNameTask(), "Имена не равны"),
-                () -> assertEquals(StatusTask.DONE, epic.getStatusTask(), "Статусы не равны"),
+                () -> assertEquals(StatusTask.IN_PROGRESS, epic.getStatusTask(), "Статусы не равны"),
                 () -> assertEquals("Описание эпика 1.",
                         epic.getDescriptionTask(),
                         "описание неверно"));
@@ -122,7 +118,7 @@ public class CSVTaskFormatterTest {
     @Test
     public void TaskFromStringSubtaskTest() {
         String subTaskContent =
-                "4,SUBTASK,Подзадача 1,DONE,Описание подзадачи 1,30,2025-01-02T12:45,2025-01-02T13:15,false,3";
+                "4,SUBTASK,Подзадача 1,DONE,Описание подзадачи 1,30,2025-01-02T12:45,2025-01-02T13:15,3";
         Subtask subTask = (Subtask) CSVTaskFormatter.fromString(subTaskContent);
 
         assertAll("сравнение полей задачи,",

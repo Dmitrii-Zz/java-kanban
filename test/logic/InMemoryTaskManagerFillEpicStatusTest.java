@@ -29,7 +29,7 @@ public class InMemoryTaskManagerFillEpicStatusTest {
         subtask2.setNameTask("Подзадача 2!");
         subtask2.setDescriptionTask("Описание подзадачи 2!");
         subtask2.setIdEpic(1);
-        subtask2.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 40));
+        subtask2.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 0));
         subtask2.setTaskDuration(30);
     }
 
