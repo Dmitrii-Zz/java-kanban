@@ -5,4 +5,4 @@ id,type,name,status,description,taskDuration,startTime,endTime,idEpic/idSubTask
 4,SUBTASK,Подзадача 1,DONE,Описание подзадачи 1,30,2025-01-02T12:45,2025-01-02T13:15,3
 5,SUBTASK,Подзадача 2,NEW,Описание подзадачи 2,45,2025-01-03T12:00,2025-01-03T12:45,3
 
-1,3,4
+4,3,1

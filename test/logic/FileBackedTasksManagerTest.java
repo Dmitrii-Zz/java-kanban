@@ -1,6 +1,7 @@
 package logic;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import task.*;
 
 import java.io.File;
@@ -59,5 +60,21 @@ public class FileBackedTasksManagerTest {
         subtask.setIdEpic(3);
 
         assertEquals(subtask, allSubtask.get(0), "Задачи не равны");
+    }
+
+    @Test
+    public void ManagerSaveExceptionTest() {
+        File file = new File("./test/resources/Resource.csv");
+        final ManagerSaveException exception = assertThrows(
+                ManagerSaveException.class,
+
+                new Executable() {
+                    @Override
+                    public void execute() {
+                        FileBackedTasksManager backedTask1 = FileBackedTasksManager.loadFromFile(file);
+                    }
+                });
+
+        assertEquals("Ошибка чтения файла!", exception.getMessage());
     }
 }
