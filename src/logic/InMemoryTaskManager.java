@@ -361,9 +361,59 @@ public class InMemoryTaskManager implements TaskManager {
 
     private boolean checkDataTime(Task task) {
 
+        Optional<LocalDateTime> optionalTaskStartTime = task.getStartTime();
+        Optional<LocalDateTime> optionalTaskEndTime = task.getEndTime();
+
+        LocalDateTime taskStartTime;
+        LocalDateTime taskEndTime;
+        LocalDateTime tStartTime;
+        LocalDateTime tEndTime;
+
+        boolean isCrossTaskFirstCase;
+        boolean isCrossTaskSecondCase;
+        boolean isCrossTaskThirdCase;
+        boolean isCrossTaskFourthCase;
+        boolean isCrossTask;
+
         for (Task t : taskSortPriority) {
-            if (task.getStartTime().equals(t.getStartTime())) {
-                if (!t.equals(task)) {
+
+            if (t.equals(task)) {
+                continue;
+            }
+
+            Optional<LocalDateTime> optionalTStartTime = t.getStartTime();
+            Optional<LocalDateTime> optionalTEndTime = t.getEndTime();
+
+            boolean isNotEmptyDataTime = optionalTaskStartTime.isPresent()
+                    && optionalTStartTime.isPresent()
+                    && optionalTaskEndTime.isPresent()
+                    && optionalTEndTime.isPresent();
+
+            if (isNotEmptyDataTime) {
+
+                tStartTime = optionalTStartTime.get();
+                tEndTime = optionalTEndTime.get();
+                taskStartTime = optionalTaskStartTime.get();
+                taskEndTime = optionalTaskEndTime.get();
+
+                isCrossTaskFirstCase = taskStartTime.isBefore(tStartTime)
+                        && taskEndTime.isBefore(tEndTime)
+                        && taskEndTime.isAfter(tStartTime);
+
+                isCrossTaskSecondCase = taskStartTime.isAfter(tStartTime)
+                        && taskStartTime.isBefore(tEndTime)
+                        && taskEndTime.isAfter(tEndTime);
+
+                isCrossTaskThirdCase = taskStartTime.isAfter(tStartTime)
+                        && taskEndTime.isBefore(tEndTime);
+
+                isCrossTaskFourthCase = taskStartTime.isBefore(tStartTime)
+                        && taskEndTime.isAfter(tEndTime);
+
+                isCrossTask = isCrossTaskFirstCase || isCrossTaskSecondCase ||
+                        isCrossTaskThirdCase || isCrossTaskFourthCase;
+
+                if (isCrossTask) {
                     return true;
                 }
             }
