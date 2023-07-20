@@ -247,15 +247,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         task.setNameTask("Задача 1.");
         task.setDescriptionTask("Описание задачи 1.");
         task.setStatusTask(StatusTask.NEW);
-        task.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 30));
-        task.setTaskDuration(30);
+        task.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 0));
+        task.setTaskDuration(60);
         backedTask.createTask(task);
 
         Task task1 = new Task();
         task1.setNameTask("Задача 2.");
         task1.setDescriptionTask("Описание задачи 2.");
         task1.setStatusTask(StatusTask.NEW);
-        task1.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 30));
+        task1.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 15));
         task1.setTaskDuration(30);
         backedTask.createTask(task1);
 
@@ -268,7 +268,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask.setNameTask("Подзадача 1");
         subtask.setDescriptionTask("Описание подзадачи 1");
         subtask.setStatusTask(StatusTask.DONE);
-        subtask.setIdEpic(3);
+        subtask.setIdEpic(2);
         subtask.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 45));
         subtask.setTaskDuration(30);
         backedTask.createSubTask(subtask);
@@ -277,8 +277,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask1.setNameTask("Подзадача 2");
         subtask1.setDescriptionTask("Описание подзадачи 2");
         subtask1.setStatusTask(StatusTask.NEW);
-        subtask1.setIdEpic(3);
-        subtask1.setStartTime(LocalDateTime.of(2025, 1, 3, 12, 0));
+        subtask1.setIdEpic(2);
+        subtask1.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 40));
         subtask1.setTaskDuration(45);
         backedTask.createSubTask(subtask1);
 
@@ -286,7 +286,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("Кол-во созданных эпиков: " + backedTask.getAllEpic().size());
         System.out.println("Кол-во созданных подзадач: " + backedTask.getAllSubTask().size());
 
-        Task task2 = backedTask.getTask(1);
+        Task task3 = backedTask.getTask(1);
         Epic epic2 = backedTask.getEpicId(3);
         Subtask subtask2 = backedTask.getSubTaskId(4);
 
