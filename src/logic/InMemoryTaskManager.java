@@ -141,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(id);
         }
 
-        tasks.clear();
+        subTasks.clear();
         epics.clear();
     }
 
@@ -270,6 +270,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    public TreeSet<Task> getTaskSortPriority() {
+        return taskSortPriority;
     }
 
     private void fillEpicStatus(int idEpic) {
