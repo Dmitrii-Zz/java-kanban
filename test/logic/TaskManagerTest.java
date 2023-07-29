@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskManagerTest {
-     private final TaskManager taskManager = Managers.getDefault();
+    TaskManager taskManager = new InMemoryTaskManager();
      private static final Task task = new Task();
      private static final Epic epic = new Epic();
      private static final Subtask subtask = new Subtask();
