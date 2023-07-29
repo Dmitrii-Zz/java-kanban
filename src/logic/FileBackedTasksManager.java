@@ -141,7 +141,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return subtasks;
     }
 
-    private void save() {
+    protected void save() {
 
         File file = new File(path);
 
@@ -156,7 +156,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public static FileBackedTasksManager loadFromFile(File file) {
 
         int idMax = 0;
-        FileBackedTasksManager backedTasksManager = new FileBackedTasksManager(file.getPath());
+        FileBackedTasksManager backedTasksManager = new FileBackedTasksManager("./src/resources/Resources.csv");
         StringBuilder content = new StringBuilder();
 
         try {
@@ -255,7 +255,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         task1.setNameTask("Задача 2.");
         task1.setDescriptionTask("Описание задачи 2.");
         task1.setStatusTask(StatusTask.NEW);
-        task1.setStartTime(LocalDateTime.of(2025, 1, 1, 12, 15));
+        task1.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 15));
         task1.setTaskDuration(30);
         backedTask.createTask(task1);
 
@@ -269,7 +269,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask.setDescriptionTask("Описание подзадачи 1");
         subtask.setStatusTask(StatusTask.DONE);
         subtask.setIdEpic(2);
-        subtask.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 45));
+        subtask.setStartTime(LocalDateTime.of(2025, 1, 3, 12, 45));
         subtask.setTaskDuration(30);
         backedTask.createSubTask(subtask);
 
@@ -278,7 +278,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         subtask1.setDescriptionTask("Описание подзадачи 2");
         subtask1.setStatusTask(StatusTask.NEW);
         subtask1.setIdEpic(2);
-        subtask1.setStartTime(LocalDateTime.of(2025, 1, 2, 12, 40));
+        subtask1.setStartTime(LocalDateTime.of(2025, 1, 4, 12, 40));
         subtask1.setTaskDuration(45);
         backedTask.createSubTask(subtask1);
 
