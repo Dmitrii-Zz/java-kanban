@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryTaskManagerFillEpicStatusTest {
 
-    private final TaskManager taskManager = Managers.getDefault();
+    private final TaskManager taskManager = new InMemoryTaskManager();
     private final Epic epic = new Epic();
     private final Subtask subtask1 = new Subtask();
     private final Subtask subtask2 = new Subtask();
