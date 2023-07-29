@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryTaskManagerCalculationEpicEndTimeTest {
 
-    TaskManager taskManager = Managers.getDefault();
+    TaskManager taskManager = new InMemoryTaskManager();
 
     @Test
     public void calculationEpicEndTimeTest() {
