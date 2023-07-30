@@ -107,8 +107,8 @@ public class HttpTaskServer {
             response = gson.toJson(manager.getTaskSortPriority());
             code = 200;
             sendRespond(exchange);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка получения приоритетных задач.");
         }
     }
 
@@ -123,8 +123,8 @@ public class HttpTaskServer {
             response = gson.toJson(manager.getHistory());
             code = 200;
             sendRespond(exchange);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка получения истории задач.");
         }
     }
 
@@ -147,12 +147,13 @@ public class HttpTaskServer {
 
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка получения задачи.");
         } catch (NumberFormatException e) {
             response = "Введен нечисловой ИД";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД задачи.");
         }
     }
 
@@ -170,17 +171,18 @@ public class HttpTaskServer {
                 code = 200;
             } else {
                 code = 400;
-                response = "Задачи с таким ИД не существует";
+                response = "Задачи с таким ИД не существует.";
             }
 
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка получения эпика.");
         } catch (NumberFormatException e) {
             response = "Введен нечисловой ИД";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД эпика.");
         }
     }
 
@@ -198,17 +200,18 @@ public class HttpTaskServer {
                 code = 200;
             } else {
                 code = 400;
-                response = "Задачи с таким ИД не существует";
+                response = "Задачи с таким ИД не существует.";
             }
 
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка получения подзадачи.");
         } catch (NumberFormatException e) {
             response = "Введен нечисловой ИД";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД подзадачи.");
         }
     }
 
@@ -252,7 +255,7 @@ public class HttpTaskServer {
         if (Pattern.matches("/tasks/subtask/update$", exchange.getRequestURI().getPath())) {
             manager.updateSubTask(subtask);
         } else {
-            manager.updateSubTask(subtask);
+            manager.createSubTask(subtask);
         }
 
         code = 201;
@@ -275,12 +278,13 @@ public class HttpTaskServer {
             code = 200;
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Произошла ошибка удаления задачи.");
         } catch (NumberFormatException e) {
-            response = "Введен нечисловой ИД";
+            response = "Введен нечисловой ИД.";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД задачи.");
         }
     }
 
@@ -299,12 +303,13 @@ public class HttpTaskServer {
             code = 200;
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Произошла ошибка удаления эпика.");
         } catch (NumberFormatException e) {
             response = "Введен нечисловой ИД";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД эпика.");
         }
     }
 
@@ -323,12 +328,13 @@ public class HttpTaskServer {
             code = 200;
             sendRespond(exchange);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (HttpServerException e) {
+            throw new HttpServerException("Ошибка удаления подзадачи.");
         } catch (NumberFormatException e) {
             response = "Введен нечисловой ИД";
             code = 400;
             sendRespond(exchange);
+            throw new HttpServerException("Ошибка получения ИД подзадачи.");
         }
     }
 
