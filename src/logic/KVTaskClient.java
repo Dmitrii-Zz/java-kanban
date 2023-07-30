@@ -29,18 +29,17 @@ public class KVTaskClient {
 
             if (response.statusCode() == 200) {
                 return apiToken = response.body();
-            } else System.out.println("токен не зарегистрирован.");
+            } else throw new TokenException("Токен не зарегистрирован");
 
         } catch (IOException | InterruptedException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
-        return "неверный токен";
+        throw new TokenException("неверный токен");
     }
 
     public void put(String key, String stringJson) {
         if (apiToken == null) {
-            System.out.println("Токен отсутствует.");
-            return;
+            throw new TokenException("Токен отсутствует.");
         }
 
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(stringJson);
@@ -55,7 +54,10 @@ public class KVTaskClient {
 
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.statusCode());
+
+            if (response.statusCode() != 200) {
+                throw new KVTaskClientException("Ошибка сохранения задач.");
+            }
 
         } catch (IOException | InterruptedException exception) {
             System.out.println("Произошла ошибка " + exception.getMessage());
@@ -75,7 +77,11 @@ public class KVTaskClient {
 
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.statusCode());
+
+            if (response.statusCode() != 200) {
+                throw new KVTaskClientException("Ошибка загрузки задач.");
+            }
+
             return response.body();
 
         } catch (IOException | InterruptedException exception) {
