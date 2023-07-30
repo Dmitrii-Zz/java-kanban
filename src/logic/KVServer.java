@@ -57,7 +57,7 @@ public class KVServer {
 				}
 			}
 		} catch (IOException exception) {
-			System.out.println("Произошла ошибка " + exception.getMessage());
+			throw new IOException();
 		} finally {
 			h.close();
 		}
