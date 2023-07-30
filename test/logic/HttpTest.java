@@ -1,20 +1,17 @@
 package logic;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.*;
 import task.StatusTask;
 import task.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class HttpTest {
 
@@ -25,11 +22,10 @@ public class HttpTest {
     private HttpRequest request;
     private URI url;
     private final Gson gson = new Gson();
+    private HttpRequest.BodyPublisher body;
+    private HttpResponse<String> response;
     private String jsonTask;
-    private Task taskLoad;
-    private Task taskLoad1;
-    private Epic epicLoad;
-    private Subtask subtaskLoad;
+    private String jsonEpic;
 
     @BeforeAll
     public static void startKVServer() throws IOException {
@@ -45,18 +41,6 @@ public class HttpTest {
         httpTaskServer.stop();
     }
 
-    @BeforeAll
-    public static void createTask() {
-
-    }
-
-    @BeforeEach
-    public void addTaskOnServer() {
-        kvTaskClient.put("/task", gson.toJson(taskLoad));
-        kvTaskClient.put("/epic", gson.toJson(epicLoad));
-        kvTaskClient.put("/subtask", gson.toJson(subtaskLoad));
-    }
-
     @BeforeEach
     public void addTask() throws IOException, InterruptedException {
         Task task = new Task();
@@ -68,24 +52,41 @@ public class HttpTest {
         task.setIdTask(1);
         jsonTask = gson.toJson(task);
         url = URI.create("http://localhost:8080/tasks/task");
-        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(jsonTask);
+        body = HttpRequest.BodyPublishers.ofString(jsonTask);
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println("\nСоздаем задачу." + "\nТело ответа: " + response.body());
+        assertEquals(201, response.statusCode());
+
+        Epic epic = new Epic();
+        epic.setNameTask("Создать тест для эпика");
+        epic.setDescriptionTask("Создаем...");
+        epic.setStatusTask(StatusTask.NEW);
+        epic.setIdTask(2);
+        jsonEpic = gson.toJson(epic);
+        url = URI.create("http://localhost:8080/tasks/epic");
+        body = HttpRequest.BodyPublishers.ofString(jsonEpic);
+        request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(body)
+                .build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("\nСоздаем эпик." + "\nТело ответа: " + response.body());
         assertEquals(201, response.statusCode());
     }
 
-    @Test
+    @BeforeEach
     public void handleTest() throws IOException {
         String token = kvTaskClient.registration();
         assertEquals(13, token.length());
+
     }
 
     @Test
-    public void httpTaskServerTest() throws IOException, InterruptedException {
+    public void httpTaskServerGetTaskTest() throws IOException, InterruptedException {
         System.out.println("\nЗапрашиваем все задачи.");
         url = URI.create("http://localhost:8080/tasks/task");
         request = HttpRequest.newBuilder()
@@ -97,6 +98,23 @@ public class HttpTest {
         System.out.println("Тело ответа " + response.body());
 
         String expectedJsonTask = "[" + jsonTask + "]";
+        assertEquals(expectedJsonTask, response.body());
+        assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    public void httpTaskServerGetEpicTest() throws IOException, InterruptedException {
+        System.out.println("\nЗапрашиваем все эпики.");
+        url = URI.create("http://localhost:8080/tasks/epic");
+        request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Тело ответа " + response.body());
+
+        String expectedJsonTask = "[" + jsonEpic + "]";
         assertEquals(expectedJsonTask, response.body());
         assertEquals(200, response.statusCode());
     }
