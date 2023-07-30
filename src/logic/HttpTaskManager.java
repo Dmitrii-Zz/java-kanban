@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpTaskManager extends  FileBackedTasksManager {
+public class HttpTaskManager extends FileBackedTasksManager {
 
     private final Gson gson = new Gson();
     private final KVTaskClient kvTaskClient;
@@ -77,9 +77,9 @@ public class HttpTaskManager extends  FileBackedTasksManager {
         } else {
             String[] contentHistory = historyString.split(",");
             for (String id : contentHistory) {
-                for (Task t : allTasks) {
-                    if (t.getIdTask() == Integer.parseInt(id)) {
-                        taskSortPriority.add(t);
+                for (Task task : allTasks) {
+                    if (task.getIdTask() == Integer.parseInt(id)) {
+                        historyManager.addTask(task);
                     }
                 }
             }
